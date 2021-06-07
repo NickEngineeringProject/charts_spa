@@ -1,7 +1,7 @@
 <template>
     <div>
-        <p>Chart</p>
         <v-chart class="chart" :option="option" />
+        {{this.data}}
     </div>
 </template>
 
@@ -34,6 +34,7 @@ export default {
     },
     data() {
         return {
+            data: [],
             option: {
                 title: {
                     text: "Traffic Sources",
@@ -76,8 +77,18 @@ export default {
                         }
                     }
                 ]
-            }
+            },
         };
+    },
+    mounted() {
+        this.update();
+    },
+    methods: {
+        update: function () {
+            axios.get('api/chart').then((response) => {
+                this.data = response.data;
+            });
+        }
     }
 };
 </script>

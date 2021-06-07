@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EchartRequest extends FormRequest
+class ChartRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,6 @@ class EchartRequest extends FormRequest
      */
     public function rules()
     {
-        // TODO дописать реквест
-        return [
-//            'chart_type' => 'required|string',
-//            'title' => 'required',
-//            'x_axis_data' => 'required',
-//            'column_name' => 'required',
-        ];
+        return [];
     }
 }

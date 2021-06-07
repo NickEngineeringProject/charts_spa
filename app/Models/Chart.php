@@ -10,6 +10,10 @@ class Chart extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'color', 'x_axis_data', 'y_axis_data', 'series_type', 'series_data', 'array_series'
+        'x_axis_data',
+        'y_axis_data',
+        'series_type',
+        'series_data',
+        'array_series'
     ];
 }

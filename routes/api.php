@@ -12,3 +12,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/chart', [EchartsController::class, 'store']);
 
 Route::get('/chart', [Charts::class, 'getJson']);
+
