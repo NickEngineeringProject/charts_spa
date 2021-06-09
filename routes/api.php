@@ -9,7 +9,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/chart', [EchartsController::class, 'store']);
-
-Route::get('/chart', [Charts::class, 'getChart']);
+Route::post('/chart', [EchartsController::class, 'createChart']);
+Route::get('/chart', [EchartsController::class, 'getChart']);
 

@@ -17,7 +17,7 @@ class Charts
         $this->yAxis = $yAxis;
     }
 
-    public function createChart(array $request)
+    public function createChart(array $request): Charts
     {
         is_null($request['array_series'])
             ? $this->series
@@ -31,15 +31,7 @@ class Charts
         $this->yAxis
             ->setAxis($request['y_axis']);
 
-//        return $this;
-        return Response::json([
-            "xAxis" => $this->xAxis
-                ->getAxis(),
-            "yAxis" => $this->yAxis
-                ->getAxis(),
-            "series" => $this->series
-                ->getSeries()
-        ], 200);
+        return $this;
     }
 
     public function getChart()
@@ -53,5 +45,6 @@ class Charts
             "series" => $this->series
                 ->getSeries()
         ], 200);
+
     }
 }

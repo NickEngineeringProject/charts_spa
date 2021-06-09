@@ -19,7 +19,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Bcrypt Options
+    | Bcrypt Axis
     |--------------------------------------------------------------------------
     |
     | Here you may specify the configuration options that should be used when
@@ -34,7 +34,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Argon Options
+    | Argon Axis
     |--------------------------------------------------------------------------
     |
     | Here you may specify the configuration options that should be used when

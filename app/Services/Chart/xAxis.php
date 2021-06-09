@@ -4,5 +4,5 @@
 namespace App\Services\Chart;
 
 
-class xAxis extends Options{}
+class xAxis extends Axis {}
 

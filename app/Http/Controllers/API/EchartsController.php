@@ -15,10 +15,15 @@ class EchartsController extends Controller
         $this->service = $service;
     }
 
-    public function store(ChartRequest $request)
+    public function createChart(ChartRequest $request)
     {
         return $this->service
-            ->createChart($request->all());
-//        ->getChart();
+            ->createChart($request->all())
+            ->getChart();
+    }
+
+    public function getChart()
+    {
+        return $this->service->getChart();
     }
 }

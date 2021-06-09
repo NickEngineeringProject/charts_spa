@@ -4,7 +4,7 @@ namespace App\Services\Chart;
 
 use stdClass;
 
-abstract class Options
+class Axis
 {
     private stdClass $axis;
 
