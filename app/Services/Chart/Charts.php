@@ -36,7 +36,6 @@ class Charts
 
     public function getChart()
     {
-
         return Response::json([
             "xAxis" => $this->xAxis
                 ->getAxis(),
@@ -45,6 +44,5 @@ class Charts
             "series" => $this->series
                 ->getSeries()
         ], 200);
-
     }
 }

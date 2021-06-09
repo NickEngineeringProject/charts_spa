@@ -3,45 +3,33 @@
 
 namespace App\Services\Chart;
 
-
 class Series
 {
     private array $series = [];
-//    protected array $data = [];
-//    protected array $value = [];
-//    protected array $name = [];
 
     public function setSeriesStr(string $type, string $data, ?string $name = null)
     {
-        //разбить на data: [
-        //                {value: 1048, name: '搜索引擎'},
-        //                {value: 735, name: '直接访问'},
-        //                {value: 580, name: '邮件营销'},
-        //                {value: 484, name: '联盟广告'},
-        //                {value: 300, name: '视频广告'}
-        //            ],
-//        if ($type == 'pie') {
-//
-//            $this->value = explode(',', str_replace(' ', '', $data));
-//
-//            $this->name = explode(',', str_replace(' ', '', $name));
-//
-//            $result = [];
-//            for ($i = 0, $i<count($this->value), $i++) {
-//                $result[] = [$this->value[$i], $this->name[$i]];
-//            }
-//
-//            $this->series = [
-//                "type" => $type,
-//                "radius" => '50%',
-//                "data" => $result
-//            ];
-//        } else {
+        if ($type == 'pie') {
+            $value = explode(',', str_replace(' ', '', $data));
+
+            $name = explode(',', str_replace(' ', '', $name));
+
+            $data = [];
+
+            for ($i = 0; $i<count($value); $i++) {
+                $data[] = (object)[
+                    "value" => (int)$value[$i],
+                    "name" => $name[$i]
+                ];
+            }
+
+            $this->series = ["radius" => '50%', "data" => $data];
+        } else {
             $this->series = [
                 "data" => explode(',', str_replace(' ', '', $data)),
                 "type" => $type,
             ];
-//        }
+        }
     }
 
     /** пример получаемых данных
@@ -53,6 +41,7 @@ class Series
      */
     public function setSeriesArr(array $series)
     {
+//        ($series[0]['type'])
         foreach ($series as $ser) { array_push($this->series, (object)$ser); }
     }
 
