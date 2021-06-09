@@ -18,7 +18,7 @@ class EchartsController extends Controller
     public function store(ChartRequest $request)
     {
         return $this->service
-            ->create($request->all())
-            ->getJson();
+            ->createChart($request->all());
+//        ->getChart();
     }
 }

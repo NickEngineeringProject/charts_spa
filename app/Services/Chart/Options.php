@@ -2,18 +2,27 @@
 
 namespace App\Services\Chart;
 
+use stdClass;
+
 abstract class Options
 {
-    protected string $type;
-    private array $data;
+    private stdClass $axis;
 
-    public function setData($data)
+    public function setAxis($data)
     {
-       $this->data = (array) $data;
+        $axis = $this->axis = new stdClass();
+
+        $axis->type = 'category';
+
+        is_array($data)
+            ? $axis->data = $data
+            : $axis->data = explode(',', str_replace(' ', '', $data));
+
+        if (empty($data)) { unset($axis->data); $axis->type = 'value'; }
     }
 
-    public function getData(): array|string
+    public function getAxis(): stdClass
     {
-        return empty($this->data) ? $this->type = 'value' : $this->data;
+        return $this->axis;
     }
 }

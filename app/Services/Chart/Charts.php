@@ -6,37 +6,52 @@ use Illuminate\Support\Facades\Response;
 
 class Charts
 {
-    private xAxios $xAxios;
-    private yAxios $yAxios;
     private Series $series;
+    private xAxis $xAxis;
+    private yAxis $yAxis;
 
-    public function __construct(xAxios $xAxios, yAxios $yAxios, Series $series)
+    public function __construct(Series $series, xAxis $xAxis, yAxis $yAxis)
     {
-        $this->xAxios = $xAxios;
-        $this->yAxios = $yAxios;
         $this->series = $series;
+        $this->xAxis = $xAxis;
+        $this->yAxis = $yAxis;
     }
 
-    public function create(array $request): Charts
+    public function createChart(array $request)
     {
-        $this->xAxios->setData($request['x_axis_data']);
-        $this->yAxios->setData($request['y_axis_data']);
-
         is_null($request['array_series'])
             ? $this->series
-                ->setSeriesObject($request['series_type'], $request['series_data'])
+                ->setSeriesStr($request['series_type'], $request['series_data'], $request['series_name'])
             : $this->series
-                ->setSeries($request['array_series']);
+                ->setSeriesArr($request['array_series']);
 
-        return $this;
+        $this->xAxis
+            ->setAxis($request['x_axis']);
+
+        $this->yAxis
+            ->setAxis($request['y_axis']);
+
+//        return $this;
+        return Response::json([
+            "xAxis" => $this->xAxis
+                ->getAxis(),
+            "yAxis" => $this->yAxis
+                ->getAxis(),
+            "series" => $this->series
+                ->getSeries()
+        ], 200);
     }
 
-    public function getJson()
+    public function getChart()
     {
+
         return Response::json([
-            "xAxis" => $this->xAxios->getData(),
-            "yAxis" => $this->yAxios->getData(),
-            "series" => $this->series->getSeries()
+            "xAxis" => $this->xAxis
+                ->getAxis(),
+            "yAxis" => $this->yAxis
+                ->getAxis(),
+            "series" => $this->series
+                ->getSeries()
         ], 200);
     }
 }

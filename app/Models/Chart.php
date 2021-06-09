@@ -10,10 +10,12 @@ class Chart extends Model
     use HasFactory;
 
     protected $fillable = [
-        'x_axis_data',
-        'y_axis_data',
         'series_type',
         'series_data',
+        //для pie
+        'series_name',
+        'x_axis',
+        'y_axis',
         'array_series'
     ];
 }
