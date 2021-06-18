@@ -1,139 +1,83 @@
 <template>
     <div>
-        <h2>Создание диаграммы</h2>
-        <p>1 шаг: выберите тип диаграммы
-            <select class="form">
-                <option
-                    v-for="item in items"
-                    v-bind:key="item.id"
-                    v-bind:value="item"
-                    v-text="item.title"
-                ></option>
-            </select>
-        </p>
-        <p>2 шаг: введите данные т.е. точки для построения
-            <input type="text">
-        </p>
-        <p>3 шаг: введите данные для отображения по оси
-            <select class="form">
-                <option
-                    v-for="item in axis"
-                    v-bind:key="item.id"
-                    v-bind:value="item"
-                    v-text="item.title"
-                ></option>
-            </select>
-            <input type="text">
-        </p>
-        <v-chart class="chart" :option="option" />
+        <form action="#">
+            <div>
+                <label>Сменить направление оси</label>
+                <input type="checkbox" v-model="axis">
+            </div>
+            <div>
+                <label>введите данные или категории для отображения по оси</label>
+                <input type="text" v-model="option.xAxis.data">
+            </div>
+            <div>
+                <label>введите данные то есть точки для постороения диаграммы</label>
+                <input type="text" v-model="option.series[0].data">
+            </div>
+        </form>
+        <v-chart v-if="render" class="chart" :option="option" />
     </div>
 </template>
 
 <script>
-import { use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
-import { PieChart } from "echarts/charts";
-import {
-    TitleComponent,
-    TooltipComponent,
-    LegendComponent
-} from "echarts/components";
+import * as echarts from 'echarts/core';
+import { GridComponent } from 'echarts/components';
+import { LineChart } from 'echarts/charts';
+import { CanvasRenderer } from 'echarts/renderers';
 import VChart, { THEME_KEY } from "vue-echarts";
 
-use([
-    CanvasRenderer,
-    PieChart,
-    TitleComponent,
-    TooltipComponent,
-    LegendComponent
-]);
+echarts.use([GridComponent, LineChart, CanvasRenderer]);
 
 export default {
+    name: "HelloWorld",
     components: {
         VChart
     },
     provide: {
         [THEME_KEY]: "dark"
     },
-    name: "Create",
-    data: () => {
+    watch: {
+    "axis": function (){
+        this.render = false
+        this.$nextTick(()=> {this.render = true})
+          if (this.axis) {
+              this.option.xAxis = this.pointsValue
+              this.option.yAxis = this.axisTitles
+          }
+          if (!this.axis) {
+              this.option.Axis = this.axisTitles
+              this.option.yAxis = this.pointsValue
+          }
+          console.log(this.axis)
+          console.log(this.option)
+      }
+    },
+    data() {
         return {
-            items: [
-                {
-                    id: 1,
-                    title: 'line',
-                    sort: 1,
-                },
-                {
-                    id: 2,
-                    title: 'bar',
-                    sort: 2,
-                },
-                {
-                    id: 3,
-                    title: 'pie',
-                    sort: 3,
-                },
-            ],
-            axis: [
-                {
-                    id: 1,
-                    title: 'x',
-                    sort: 1,
-                },
-                {
-                    id: 2,
-                    title: 'y',
-                    sort: 2,
-                },
-            ],
-            sort: null,
+            render: true,
+            axisTitles: null,
+            pointsValue: null,
+            axis: false,
             option: {
-                title: {
-                    text: "Traffic Sources",
-                    left: "center"
+                xAxis: {
+                    type: 'category',
+                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
                 },
-                tooltip: {
-                    trigger: "item",
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                yAxis: {
+                    type: 'value'
                 },
-                legend: {
-                    orient: "vertical",
-                    left: "left",
-                    data: [
-                        "Direct",
-                        "Email",
-                        "Ad Networks",
-                        "Video Ads",
-                        "Search Engines"
-                    ]
-                },
-                series: [
-                    {
-                        name: "Traffic Sources",
-                        type: "pie",
-                        radius: "55%",
-                        center: ["50%", "60%"],
-                        data: [
-                            { value: 335, name: "Direct" },
-                            { value: 310, name: "Email" },
-                            { value: 234, name: "Ad Networks" },
-                            { value: 135, name: "Video Ads" },
-                            { value: 1548, name: "Search Engines" }
-                        ],
-                        emphasis: {
-                            itemStyle: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: "rgba(0, 0, 0, 0.5)"
-                            }
-                        }
-                    }
-                ]
+                series: [{
+                    data: [150, 230, 224, 218, 135, 147, 260],
+                    type: 'line'
+                }]
             }
+        };
+    },
+    methods: {
+        transformDataChart() {
+
         }
     }
-}
+};
 </script>
 
 <style scoped>
