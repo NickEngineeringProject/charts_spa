@@ -17,7 +17,6 @@
             <button v-on:click.prevent="getFilterRequest()">Создать</button>
         </form>
         <v-chart class="chart" :option="options" />
-        <div>{{this.option}}</div>
         <div>{{this.options}}</div>
     </div>
 </template>
@@ -59,13 +58,13 @@ export default {
             option: {
                 xAxis: {
                     type: 'category',
-                    data: [1]
+                    data: []
                 },
                 yAxis: {
                     type: 'value'
                 },
                 series: [{
-                    data: [1],
+                    data: [],
                     type: 'line'
                 }]
             },
@@ -80,7 +79,10 @@ export default {
                 "series_data": this.option.series[0].data.toString(),
                 "series_name": "",
                 "series_type": this.option.series[0].type
-            }).then(response => this.options = response.data)
+            }).then(response => {
+                this.options = response.data
+                console.log(response.data)
+            })
                 .catch(error => console.log(error));
         }
     }
