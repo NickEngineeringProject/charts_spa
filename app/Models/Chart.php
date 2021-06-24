@@ -16,6 +16,5 @@ class Chart extends Model
         'series_name',
         'x_axis',
         'y_axis',
-        'array_series'
     ];
 }

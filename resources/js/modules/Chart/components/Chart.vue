@@ -2,21 +2,28 @@
     <div class="dark:bg-gray-800">
         <h2>Создание диаграммы</h2>
         <form action="#" method="post">
-<!--            <div>-->
-<!--                <label>Сменить направление оси</label>-->
-<!--                <input type="checkbox" v-model="axis">-->
-<!--            </div>-->
-<!--            <div>-->
-<!--                <label>введите данные или категории для отображения по оси</label>-->
-<!--                <input type="text" v-model="option.xAxis.data">-->
-<!--            </div>-->
-<!--            <div>-->
-<!--                <label>введите данные то есть точки для постороения диаграммы</label>-->
-<!--                <input type="text" v-model="option.series[0].data">-->
-<!--            </div>-->
+            <div>
+                <label>Выберите тип диаграммы</label>
+                <input type="text" v-model="this.option.series[0].type">
+            </div>
+            <div>
+                <label>Сменить направление оси</label>
+                <input type="checkbox" v-model="axis">
+            </div>
+            <div>
+                <label>Введите данные или категории для отображения по оси</label>
+                <input type="text" v-model="option.xAxis.data">
+            </div>
+            <div>
+                <label>Введите данные то есть точки для постороения диаграммы</label>
+                <input type="text" v-model="option.series[0].data">
+            </div>
             <button v-on:click.prevent="getFilterRequest()">Создать</button>
         </form>
         <v-chart v-if="render" class="chart" :option="option" />
+        <div>
+            {{this.option}}
+        </div>
     </div>
 </template>
 

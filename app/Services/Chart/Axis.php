@@ -4,25 +4,18 @@ namespace App\Services\Chart;
 
 use stdClass;
 
-class Axis
+abstract class Axis
 {
-    private stdClass $axis;
-
-    public function setAxis($data)
+    public function labels($data): stdClass
     {
-        $axis = $this->axis = new stdClass();
+        $axis = new stdClass();
+        if (!empty($data)) {
+            is_array($data)
+                ? $axis->data = $data
+                : $axis->data = explode(',', str_replace(' ', '', $data));
+            $axis->type = 'category';
+        } else { $axis->type = 'value'; }
 
-        $axis->type = 'category';
-
-        is_array($data)
-            ? $axis->data = $data
-            : $axis->data = explode(',', str_replace(' ', '', $data));
-
-        if (empty($data)) { unset($axis->data); $axis->type = 'value'; }
-    }
-
-    public function getAxis(): stdClass
-    {
-        return $this->axis;
+        return $axis;
     }
 }
