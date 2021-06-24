@@ -7,10 +7,6 @@
                 <input type="text" v-model="this.option.series[0].type">
             </div>
             <div>
-                <label>Сменить направление оси</label>
-                <input type="checkbox" v-model="axis">
-            </div>
-            <div>
                 <label>Введите данные или категории для отображения по оси</label>
                 <input type="text" v-model="option.xAxis.data">
             </div>
@@ -20,10 +16,9 @@
             </div>
             <button v-on:click.prevent="getFilterRequest()">Создать</button>
         </form>
-        <v-chart v-if="render" class="chart" :option="option" />
-        <div>
-            {{this.option}}
-        </div>
+        <v-chart class="chart" :option="options" />
+        <div>{{this.option}}</div>
+        <div>{{this.options}}</div>
     </div>
 </template>
 
@@ -41,7 +36,7 @@ import {
 } from 'echarts/components';
 import { LineChart } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
-import VChart, { THEME_KEY } from "vue-echarts";
+import VChart, { THEME_KEY, UPDATE_OPTIONS_KEY } from "vue-echarts";
 echarts.use([
     GridComponent,
     LegendComponent,
@@ -58,31 +53,25 @@ echarts.use([
 export default {
     name: "Chart",
     components: { VChart },
-    provide: { [THEME_KEY]: "dark" },
-    watch: {
-        // "axis": function () {
-        //     axios('')
-        // }
-    },
+    provide: { [THEME_KEY]: "dark"},
     data() {
         return {
-            render: true,
             option: {
                 xAxis: {
                     type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    data: [1]
                 },
                 yAxis: {
                     type: 'value'
                 },
                 series: [{
-                    data: [150, 230, 224, 218, 135, 147, 260],
+                    data: [1],
                     type: 'line'
                 }]
-            }
+            },
+            options: {}
         };
     },
-    mounted() {},
     methods: {
         getFilterRequest() {
             axios['post']('http://127.0.0.1:8000/api/chart', {
@@ -90,9 +79,8 @@ export default {
                 "y_axis": this.option.yAxis.data ? this.option.xAxis.data.toString() : "",
                 "series_data": this.option.series[0].data.toString(),
                 "series_name": "",
-                "series_type": this.option.series[0].type,
-                "array_series": ""
-            }).then(response => console.log(response))
+                "series_type": this.option.series[0].type
+            }).then(response => this.options = response.data)
                 .catch(error => console.log(error));
         }
     }

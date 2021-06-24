@@ -9,6 +9,7 @@ abstract class Axis
     public function labels($data): stdClass
     {
         $axis = new stdClass();
+
         if (!empty($data)) {
             is_array($data)
                 ? $axis->data = $data

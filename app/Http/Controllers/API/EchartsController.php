@@ -15,7 +15,7 @@ class EchartsController extends Controller
         $this->service = $service;
     }
 
-    public function __invoke(ChartRequest $request)
+    public function __invoke(ChartRequest $request): array
     {
         return $this->service
             ->handler($request->all());

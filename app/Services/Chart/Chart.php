@@ -15,6 +15,8 @@ class Chart
         $this->xAxis = $xAxis;
         $this->yAxis = $yAxis;
     }
+    // TODO: try catch
+    // TODO: chaining для библиотеки
 //    public static function build(): Chart
 //    {
 //        dd(new Chart(new Series, new xAxis, new yAxis));
@@ -42,9 +44,7 @@ class Chart
             "yAxis" => $this->yAxis
                 ->labels($request['y_axis']),
             "series" => $this->series
-                ->dataset(
-                    $request['series_type'], $request['series_data'], $request['series_name']
-                ),
+                ->dataset($request['series_type'], $request['series_data'], $request['series_name']),
         ];
     }
 }
