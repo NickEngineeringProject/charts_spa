@@ -16,7 +16,7 @@ class Series
 
             switch ($type) {
                 case "line":
-                    return ["data" => $value, "type" => $type];
+                    return ["data" => $value, "type" => $type, "smooth" => false];
                     break;
                 case "pie":
                     $data = [];
@@ -26,13 +26,20 @@ class Series
                     return ["radius" => "50%", "data" => $data];
                     break;
                 case "scatter":
-                    //TODO: протестировать ввод 3 параметров
+                    //TODO: протестировать ввод 1,3 параметров(ринимает 2)
                     //TODO: продумать изменение свойства symbolSize а также подсказки для пользователя типа что такое стандартная диаграмма
                     $data = [];
                     for ($i = 0; $i<count($value); $i++) {
                         $data[] = [$value[$i], $value[++$i]];
                     }
                     return ["symbolSize" => 20, "data" => $data, "type" => $type];
+                case "k":
+                    //TODO: протестировать ввод 3,5 параметров(принимает 4)
+                    $data = [];
+                    for ($i = 0; $i<count($value); $i++) {
+                        $data[] = [$value[$i], $value[++$i], $value[++$i], $value[++$i]];
+                    }
+                    return ["type" => $type, "data" => $data];
                 default:
                     return Response::json(["status" => "error", "message" => "Данного типа диаграммы не существует!"], 500);
             }
