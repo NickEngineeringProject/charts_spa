@@ -3,7 +3,6 @@
 
 namespace App\Services\Chart;
 
-use Exception;
 use Illuminate\Support\Facades\Response;
 
 class Series
@@ -29,12 +28,14 @@ class Series
     public function dataset(string $type, string $value, ?string $name = null)
     {
         try {
+            $data = $this->advancedHandler($value, $name);
+
             return match ($type) {
-                "line" => ["data" => $this->stringHandler($value), "type" => $this->stringHandler($type), "smooth" => false],
-                "pie" => ["radius" => "50%", "data" => $this->advancedHandler($value, $name)],
-                "scatter" => ["symbolSize" => 20, "data" => $this->advancedHandler($value, $name), "type" => $type],
-                "k" => ["type" => $type, "data" => $this->advancedHandler($value, $name)],
-                default => Response::json(["status" => "error", "message" => "Данного типа диаграммы не существует!"], 500),
+                "line" => ["data" => $data, "type" => $type, "smooth" => false],
+                "pie" => ["radius" => "50%", "data" => $data],
+                "scatter" => ["symbolSize" => 20, "data" => $data, "type" => $type],
+                "k" => ["type" => $type, "data" => $data],
+                default => Response::json(["status" => "error", "message" => "Данного типа диаграммы не существует из доступных: line, pie, scatter, k."], 409),
             };
         } catch (\Exception) {
             return Response::json(["status" => "error", "message" => "Ошибка в обработке данных объекта Series"], 500);
