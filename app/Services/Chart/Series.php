@@ -7,56 +7,59 @@ use Illuminate\Support\Facades\Response;
 
 class Series
 {
-    public function stringHandler(string $value): array
+    /**
+     * @param string $dataset
+     * @return array
+     */
+    public function stringHandler(string $dataset): array
     {
-        return explode(",", str_replace(" ", "", $value));
+        return explode(",", str_replace(" ", "", $dataset));
     }
 
-    public function advancedHandler(string $value, string $name, string $type): array
+    public function advancedHandler(string $firstDataset, string $secondDataset, string $chartType): array
     {
-        $value = $this->stringHandler($value);
-        $name = $this->stringHandler($name);
+        $firstDataset = $this->stringHandler($firstDataset);
+        $secondDataset = $this->stringHandler($secondDataset);
 
         $data = [];
-        for ($i = 0; $i<count($value); $i++) {
-            switch ($type) {
-                //тип приводится автоматически иначе написать проверку на число и выдавать предупреждение
-                //проверить на количество входящих элементов
+        for ($i = 0; $i<count($firstDataset); $i++) {
+            switch ($chartType) {
+                //TODO: тип приводится автоматически иначе написать проверку на число и выдавать предупреждение
+                //TODO: проверить на количество входящих элементов
                 case "pie":
-                    $data[] = (object)["value" => (int)$value[$i], "name" => $name[$i]];
+                    $data[] = (object)["value" => (int)$firstDataset[$i], "name" => $secondDataset[$i]];
                     break;
                 case "scatter":
-                    $data[] = [(int)$value[$i], (int)$name[$i]];
+                    $data[] = [(int)$firstDataset[$i], (int)$secondDataset[$i]];
                     break;
                 case "k":
-                    $data[] = [(int)$value[$i], (int)$value[++$i], (int)$value[++$i], (int)$value[++$i]];
+                    $data[] = [(int)$firstDataset[$i], (int)$firstDataset[++$i], (int)$firstDataset[++$i], (int)$firstDataset[++$i]];
                     break;
             }
         }
         return $data;
     }
 
-    public function dataset(string $type, string $value, ?string $name = null): \Illuminate\Http\JsonResponse|array
+    public function dataset(string $chartType, string $firstDataset, ?string $secondDataset = null): \Illuminate\Http\JsonResponse|array
     {
         try {
-            $values = $this->advancedHandler($value, $name, $type);
+            $dataset = $this->advancedHandler($firstDataset, $secondDataset, $chartType);
 
-            return match ($type) {
-                "line" => ["data" => $this->stringHandler($value), "type" => $type, "smooth" => false],
-                "pie" => ["radius" => "50%", "data" => $values],
-                "scatter" => ["symbolSize" => 20, "data" => $values, "type" => $type],
-                "k" => ["type" => $type, "data" => $values],
+            return match ($chartType) {
+                "line" => ["data" => $this->stringHandler($firstDataset), "type" => $chartType, "smooth" => false],
+                "pie" => ["radius" => "50%", "data" => $dataset],
+                "scatter" => ["symbolSize" => 20, "data" => $dataset, "type" => $chartType],
+                "k" => ["type" => $chartType, "data" => $dataset],
 
                 default => Response::json([
                     "status" => "error",
-                    "message" => "Данного типа диаграммы не существует из доступных: line, pie, scatter, k
-                     или введено больше или меньше элементов для построения диаграммы."
+                    "message" => "Данного типа диаграммы не существует из доступных: line, pie, scatter, k."
                 ], 409),
             };
         } catch (\Exception) {
             return Response::json([
                 "status" => "error",
-                "message" => "Ошибка в обработке данных объекта Series"
+                "message" => "Ошибка в обработке данных объекта Series или введено больше или меньше элементов для построения диаграммы."
             ], 500);
         }
     }
